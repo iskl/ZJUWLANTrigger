@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>me.kailai.alfred.zjuwlan</string>
+	<key>category</key>
+	<string>Internet</string>
+	<key>connections</key>
+	<dict>
+		<key>1EA01771-03FC-4C42-83FB-5F14901AC623</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>22A2C617-489A-4054-BE73-B3F317EABE9F</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>87283EE2-5F6B-4AC0-9D0B-9050A8BF5DF1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1EA01771-03FC-4C42-83FB-5F14901AC623</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Kailai Shao</string>
+	<key>description</key>
+	<string>浙大无线网一键登录</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>ZJUWLAN Trigger</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>keyword</key>
+				<string>zjuwlan</string>
+				<key>subtext</key>
+				<string>Connect to ZJUWLAN</string>
+				<key>text</key>
+				<string>浙大无线网一键登录</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>87283EE2-5F6B-4AC0-9D0B-9050A8BF5DF1</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string>#!/usr/bin/python
+#coding=utf8
+
+import httplib, urllib
+
+httpClient = None
+try:
+	params = urllib.urlencode({'action': 'login',
+		'username': 'username here',
+		'password': 'password here',
+		'ac_id': '3',
+		'type': '1',
+		'is_ldap': '1',
+		'local_auth': '1'})
+	headers = {"Content-type": "application/x-www-form-urlencoded"
+					, "Accept": "text/plain"}
+	httpClient = httplib.HTTPConnection("10.50.200.245", 80, timeout=30)
+	httpClient.request("POST", "/cgi-bin/srun_portal", params, headers)
+
+	response = httpClient.getresponse()
+	if response.status == 200:
+		feedback = response.read()
+		if "login_ok" in feedback:
+			print "登陆成功"
+		else:
+			print feedback
+	else:
+		print response.status
+		print response.reason
+		print response.read()
+except Exception, e:
+	print e
+finally:
+	if httpClient:
+		httpClient.close()</string>
+				<key>type</key>
+				<integer>3</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>1EA01771-03FC-4C42-83FB-5F14901AC623</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>output</key>
+				<integer>0</integer>
+				<key>removeextension</key>
+				<true/>
+				<key>sticky</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>ZJUWLAN Notification</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>22A2C617-489A-4054-BE73-B3F317EABE9F</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>1EA01771-03FC-4C42-83FB-5F14901AC623</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+		<key>22A2C617-489A-4054-BE73-B3F317EABE9F</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+		<key>87283EE2-5F6B-4AC0-9D0B-9050A8BF5DF1</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>kailai.me</string>
+</dict>
+</plist>
